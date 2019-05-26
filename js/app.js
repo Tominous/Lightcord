@@ -41,7 +41,7 @@ marked.setOptions({
 	renderer: MDRends.embedTitle,
 	tables: false
 })
-//MDRends.message.link = (h,i,t)=>`[${t}](${h})`;
+MDRends.message.link = (h,i,t)=>`[${t}](${h})`;
 MDRends.message.image = (h,i,t)=>`![${t}](${h})`;
 MDRends.message.hr = ()=>`---`;
 MDRends.message.heading = (t,l)=>`${"#".repeat(l)} ${t}<br>`;
@@ -74,7 +74,7 @@ MDRends.embedTitle.hr = ()=>`---`;
 MDRends.embedTitle.paragraph = (t)=>`${t}`;
 MDRends.embedTitle.heading = (t,l)=>`${"#".repeat(l)} ${t}`;
 MDRends.embedTitle.code = (c,l)=>`\`\`\`${l}${c}\`\`\``;
-// marked('# heading+', { renderer: MDRends.message })
+ marked('# heading+', { renderer: MDRends.message })
 var avatarHashes = [
 	"6debd47ed13483642cf09e832ed0bc1b",
 	"322c936a8c8be1b803cd94861bdfa868",
@@ -212,16 +212,16 @@ let App = {
 				});
 
 				console.log('%c[Lightcord] %cLoading DMs', 'color:#59A1EA; font-weight: bold;', 'color:#000;');
-				App.switchTo.DMs();/*
+				App.switchTo.DMs();
 				if (!bot.user.bot){
 					bot.guilds.forEach(guild=>{
 						guildVar = '<div class="guild" data-guild="' + guild.id + '"><a draggable="false" onclick="App.switchTo.guild(\'' + guild.id + '\')" style="background-color: rgb(46, 49, 54);" class="avatar" tooltip-left="' + guild.name + '">' + guild.name.match(/\b\w/g).join('') + '</a></div>';
 						if (guild.icon) guildVar = '<div class="guild" data-guild="' + guild.id + '"><a draggable="false" onclick="App.switchTo.guild(\'' + guild.id + '\')" style="background: url(\'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.webp\');background-size: 50px 50px;" class="avatar-small" tooltip-left="' + guild.name + '"></a></div>';
 						$('.guilds').append(guildVar);
 					});
-				}else{*/
+				}else{
 				$('.guilds').remove();
-				//}
+				}
 				console.log('%c[Lightcord] %cStoring key events', 'color:#59A1EA; font-weight: bold;', 'color:#000;');
 				document.onkeydown = function (e) {
 					var code = (e.keyCode ? e.keyCode : e.which)
@@ -241,13 +241,13 @@ let App = {
 				document.onkeyup = function (e) {
 					App.shifting = e.shiftKey;
 					if(!e.shiftKey) $(".upload-modal-block h1").text("Drag & Drop");
-				};/*
+				};
 				document.ondragenter = function (e) {
 					$('.upload-modal').attr('style', '');
 				};
 				document.ondragleave = function (e) {
 					$('.upload-modal').attr('style', 'display: none;');
-				};*/
+				};
 				$(".account-change-status input").keypress(function (e) {
 					var code = (e.keyCode ? e.keyCode : e.which);
 					if (code === 13 && !e.shiftKey) {
@@ -390,14 +390,14 @@ let App = {
 				var parsedMsg = $('<div class="msg-group" style="padding: 15px 0;">').append('<div class="message"><div class="comment" data-uid="' + msg.author.id + '" style="margin-left: 20px;"><div class="message-text"><span data-id="' + msg.id + '" class="markup">' + msg.content + '</span></div></div></div></div>')
 				return $('.messages-container').append(parsedMsg)
 			} else var parsedMsg = $('<div class="msg-group">').append('<div class="message"><div class="avatar-large" style="background-image: url(\'' + avatar + '\');"></div><div class="comment" data-uid="' + msg.author.id + '"><h2><span class="username-wrap">' + username + '</strong></span><span data-timestamp="' + msg.createdTimestamp + '" class="timestamp">' + moment(msg.createdTimestamp).calendar() + '</span></h2><div class="message-text"><span data-id="' + msg.id + '" class="markup">' + App.payloadManager.messageEmbed(msg) + '</span></div></div></div></div>')
-			//} else var parsedMsg = $('<div class="msg-group">').append('<div class="message"><div class="avatar-large" style="background-image: url(\'' + avatar + '\');"></div><div class="comment" data-uid="' + msg.author.id + '"><h2><span class="username-wrap">' + username + '</strong></span><span data-timestamp="' + msg.createdTimestamp + '" class="timestamp">' + moment(msg.createdTimestamp).calendar() + '</span></h2><div class="message-text"><span data-id="' + msg.id + '" class="markup">' + converter.makeHtml(App.payloadManager.messageEmbed(msg)) + '</span></div></div></div></div>')
+			} else var parsedMsg = $('<div class="msg-group">').append('<div class="message"><div class="avatar-large" style="background-image: url(\'' + avatar + '\');"></div><div class="comment" data-uid="' + msg.author.id + '"><h2><span class="username-wrap">' + username + '</strong></span><span data-timestamp="' + msg.createdTimestamp + '" class="timestamp">' + moment(msg.createdTimestamp).calendar() + '</span></h2><div class="message-text"><span data-id="' + msg.id + '" class="markup">' + converter.makeHtml(App.payloadManager.messageEmbed(msg)) + '</span></div></div></div></div>')
 			var d = $(document.querySelector('[data-uid="' + msg.author.id + '"]')).parents()
 			if (d[2] !== undefined) {
 				var day = moment(msg.createdTimestamp).format('hh-DDMMYY').split('-')
 				var lastTimestamp = moment(parseInt(d[2].lastChild.firstChild.lastChild.firstChild.lastChild.dataset.timestamp)).format('hh-DDMMYY').split('-')
 				if (d[2].lastChild.firstChild.lastChild.dataset.uid === msg.author.id && day[0] === lastTimestamp[0] && day[1] === lastTimestamp[1]) {
 					$(d[2].lastChild.firstChild.lastChild.lastChild).append('<span data-id="' + msg.id + '" class="markup">' + App.payloadManager.messageEmbed(msg) + '</span>')
-					// $(d[2].lastChild.firstChild.lastChild.lastChild).append('<span data-id="' + msg.id + '" class="markup">' + converter.makeHtml(App.payloadManager.messageEmbed(msg)) + '</span>')
+					 $(d[2].lastChild.firstChild.lastChild.lastChild).append('<span data-id="' + msg.id + '" class="markup">' + converter.makeHtml(App.payloadManager.messageEmbed(msg)) + '</span>')
 					return $('.messages-container').scrollTop($('.messages-container').scrollTop() + $('.chat').children()[1].lastChild.lastChild.lastChild.clientHeight + 10)
 				} else return $('.messages-container').append(parsedMsg)
 			}
@@ -453,12 +453,12 @@ let App = {
 					if (embed.provider) provider = '<div class="embed-provider">' + embed.provider.name + '</div>'
 					if (embed.type === 'image') attachEnd = attachEnd + (msg.embeds.indexOf(embed)!==0 ? '<br>' : '') + '<img src="' + embed.thumbnail.proxyURL + '" href="' + embed.thumbnail.url + '">'
 					if (embed.type === 'video') attachEnd = attachEnd + (msg.embeds.indexOf(embed)!==0 ? '<br>' : '') + '<div class="embed"><img src="' + embed.thumbnail.proxyURL + '" href="' + embed.thumbnail.url + '" width="' + embed.thumbnail.width +  '" height="' + embed.thumbnail.height +  '"></div>'
-					/*if (embed.type === 'link') {
+					if (embed.type === 'link') {
 						if (embed.description)attachEnd = attachEnd + (msg.embeds.indexOf(embed)!==0 ? '<br>' : '') + '<div class="embed"><div class="embed-description">' + embed.description + '</div></div>'
 					}
 					if (embed.type === 'article') {
 						if (embed.description) attachEnd = attachEnd + (msg.embeds.indexOf(embed)!==0 ? '<br>' : '') + '<div class="embed">' + provider + '<div class="embed-description">' + embed.description + '</div></div>'
-					}*/
+					}
 					if (embed.type === 'rich' || embed.type === 'link' || embed.type === 'article') {
 						var embData = [];
 						if (embed.author) {
@@ -859,7 +859,7 @@ let App = {
 				}
 
 				$('.members-wrap').addClass('dm');
-				if(channel.type === "dm") return;/*
+				if(channel.type === "dm") return;
 				$('.members').empty();
 				let roles = [];
 				channel.guild.roles.array().filter(role=>role.name==="@everyone"||role.hoist).map(role=>roles.push(role));
@@ -885,7 +885,7 @@ let App = {
 					if(user.presence.status === 'offline'){
 						$('.offline-members-wrap').append('<div class="member"><a data-id="' + user.id + '" onclick="App.switchTo.dmChannel(\'' + user.id + '\')" draggable="false"><div style="background-image: url(\'' + avatar + '\')" class="avatar-small-dm"></div><div class="member-user no-status" ' + (member && member.colorRole ? 'style="opacity:1;color:' + member.colorRole.hexColor + ';"' : '') + '>' + member.displayName.replace(/</ig, '&lt;').replace(/>/ig, '&gt;') + (member.bot ? '<p class="bot-tag">BOT</p>' : '') + '</div></a></div>')
 					}
-				});*/
+				});
 				$('.members-wrap').removeClass('dm');
 			});
 		},
@@ -928,14 +928,14 @@ let App = {
 			let user = bot.users.get(id);
 			var dms = bot.channels.filter(c=>c.type==="dm");
 			if (!dms.has(id)) {
-				user.createDM().then((r) => {/*
+				user.createDM().then((r) => {
 					var privateChannelData = {
 						id: r.id,
 						last_message_id: r.last_message_id,
 						recipients: [r.recipient],
 						type: 1
 					}
-					bot.channels.set(r.id, new Discord.DMChannel(bot, privateChannelData));*/
+					bot.channels.set(r.id, new Discord.DMChannel(bot, privateChannelData));
 					App.switchTo.DMs();
 					App.switchTo.channel(r.id, r.recipient.username);
 				});
@@ -1105,7 +1105,7 @@ let App = {
 				if(results.indexOf(res) > 200) return;
 				try{
 					if(res.region){
-						//$(".quickswitcher-scroller").append(`<div class="result" data-id="${res.id}" onclick="App.deploy.clearModal();App.switchTo.guild('${res.id}')"><div class="icon" style="background-image: url(&quot;https://cdn.discordapp.com/icons/${res.id}/${res.icon}.png&quot;);"></div><span>${res.name.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`);
+						$(".quickswitcher-scroller").append(`<div class="result" data-id="${res.id}" onclick="App.deploy.clearModal();App.switchTo.guild('${res.id}')"><div class="icon" style="background-image: url(&quot;https://cdn.discordapp.com/icons/${res.id}/${res.icon}.png&quot;);"></div><span>${res.name.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`);
 						found.guilds.push(`<div class="result" data-id="${res.id}" onclick="App.deploy.clearModal();App.switchTo.guild('${res.id}')"><div class="icon" style="background-image: url(&quot;${res.icon ? res.iconURL('png', 128) : `http://via.placeholder.com/20/202226/fff?text=${encodeURI(res.nameAcronym)}`}&quot;);"></div><span>${res.name.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></div>`);
 					}else if(res.bot !== undefined){
 						let avatar_url = res.displayAvatarURL({format:'png', size:128});
